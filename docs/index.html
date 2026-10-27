@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Eleana Nurcahyo - Paintings &amp; Handicrafts</title>
+<meta name="description" content="A gallery of paintings and handicrafts by Eleana Nurcahyo.">
+<style>
+:root{--bg:#fffaf3;--ink:#2b2a33;--accent:#e86a5c;--card:#fff;--muted:#6d6a78}
+@media (prefers-color-scheme:dark){:root{--bg:#1d1b22;--ink:#f3eee6;--card:#2a2731;--muted:#a9a5b5}}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+header{text-align:center;padding:56px 16px 24px}
+h1{margin:0;font-size:clamp(2rem,6vw,3.2rem);letter-spacing:-.02em}
+h1 span{color:var(--accent)}
+header p{color:var(--muted);margin:8px 0 0}
+nav{display:flex;gap:8px;justify-content:center;margin:24px 0}
+nav button{border:2px solid var(--accent);background:none;color:var(--ink);padding:8px 18px;border-radius:999px;font:inherit;cursor:pointer}
+nav button.on{background:var(--accent);color:#fff}
+main{max-width:1100px;margin:0 auto;padding:0 16px 56px}
+#grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px}
+figure{margin:0;background:var(--card);border-radius:14px;overflow:hidden;box-shadow:0 2px 10px #0002}
+figure img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;background:#ddd}
+figcaption{padding:12px 14px}
+figcaption b{display:block}
+figcaption small{color:var(--muted)}
+.empty{text-align:center;color:var(--muted);padding:40px 0}
+footer{text-align:center;color:var(--muted);padding:24px 16px 40px;font-size:.9rem}
+</style>
+</head>
+<body>
+<header>
+  <h1>Eleana <span>Nurcahyo</span></h1>
+  <p>Paintings &amp; handicrafts</p>
+</header>
+<nav id="filters">
+  <button class="on" data-f="all">All</button>
+  <button data-f="painting">Paintings</button>
+  <button data-f="handicraft">Handicrafts</button>
+</nav>
+<main>
+  <div id="grid"></div>
+</main>
+<footer>&copy; <span id="y"></span> Eleana Nurcahyo</footer>
+<script>
+// Add new artwork here: image file goes in /images
+const works = [
+  // { title: "Sunflowers", type: "painting", year: 2026, img: "images/sunflowers.jpg" },
+  // { title: "Paper Flower", type: "handicraft", year: 2026, img: "images/paper-flower.jpg" },
+];
+const grid = document.getElementById('grid');
+function render(f){
+  const list = works.filter(w => f === 'all' || w.type === f);
+  grid.innerHTML = list.length ? '' : '<p class="empty">New artwork coming soon!</p>';
+  list.forEach(w => {
+    const el = document.createElement('figure');
+    el.innerHTML = '<img loading="lazy" alt=""><figcaption><b></b><small></small></figcaption>';
+    el.querySelector('img').src = w.img;
+    el.querySelector('img').alt = w.title;
+    el.querySelector('b').textContent = w.title;
+    el.querySelector('small').textContent = w.type + (w.year ? ' · ' + w.year : '');
+    grid.appendChild(el);
+  });
+}
+document.getElementById('filters').addEventListener('click', e => {
+  if (e.target.tagName !== 'BUTTON') return;
+  document.querySelectorAll('#filters button').forEach(b => b.classList.toggle('on', b === e.target));
+  render(e.target.dataset.f);
+});
+document.getElementById('y').textContent = new Date().getFullYear();
+render('all');
+</script>
+</body>
+</html>
